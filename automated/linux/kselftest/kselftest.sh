@@ -200,15 +200,6 @@ if [ -f "${SKIPFILE}" ] &&  [ -z "${SKIPLIST}" ]; then
 fi
 
 cp kselftest-list.txt kselftest-list.txt.orig
-echo "skiplist:"
-echo "========================================"
-while read -r skip_regex; do
-    echo "$skip_regex"
-    # Remove matching tests from list of tests to run and report it as skipped
-    perl -i -ne 'if (s|^('"${skip_regex}"')$|\1 skip|) { print STDERR; } else { print; }' kselftest-list.txt 2>>"${RESULT_FILE}"
-done < "${skips}"
-echo "========================================"
-rm -f "${skips}"
 
 if [ -n "${TST_CASENAME}" ]; then
     ./run_kselftest.sh -t "${TST_CASENAME}" 2>&1 | tee -a "${LOGFILE}"
